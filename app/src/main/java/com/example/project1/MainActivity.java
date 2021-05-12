@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText editTextUpper = findViewById(R.id.seekbarUpper);
 
         final int maxBound = 1000;
-        int lowerBoundCurrentNum = 1; //has to be changed to the Values in EditText section
-        int upperBoundCurrentNum = 4; //has to be changed to the Values in EditText section
+        int lowerBoundCurrentNum = 1; //has to be changed to the Values in EditText lower section
+        int upperBoundCurrentNum = 4; //has to be changed to the Values in EditText higher section
         int guessedNumber;
         int duration = Toast.LENGTH_SHORT;
         Context context = getApplicationContext();
