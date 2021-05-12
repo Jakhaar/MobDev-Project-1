@@ -25,6 +25,7 @@
         android:id="@+id/hintButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:text="HINT"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +35,7 @@
         app:layout_constraintVertical_bias="0.959" />
 
     <EditText
-        android:id="@+id/numberField2"
+        android:id="@+id/seekbarUpper"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -47,7 +48,7 @@
         app:layout_constraintVertical_bias="0.098" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/seekbarLower"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -241,6 +242,7 @@
         android:id="@+id/evaluateButton"
         android:layout_width="143dp"
         android:layout_height="48dp"
+        android:enabled="false"
         android:text="EVALUATE!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

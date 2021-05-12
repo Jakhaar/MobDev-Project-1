@@ -1,17 +1,20 @@
 package com.example.project1;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Toast;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,14 +25,68 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //FloatingActionButton fab = findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-           // @Override
-           // public void onClick(View view) {
-            //    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            //            .setAction("Action", null).show();
-           // }
-        //});
+        SeekBar seekbarLower = findViewById(R.id.seekBarLowerBound);
+        SeekBar seekbarUpper = findViewById(R.id.seekBarUpperBound);
+        final Button numberGeneratorButton = findViewById(R.id.numberGeneratorButton);
+        final EditText editTextLower = findViewById(R.id.seekbarLower);
+        final EditText editTextUpper = findViewById(R.id.seekbarUpper);
+
+        final int maxBound = 1000;
+        int lowerBoundCurrentNum = 1; //has to be changed to the Values in EditText section
+        int upperBoundCurrentNum = 4; //has to be changed to the Values in EditText section
+        int guessedNumber;
+        int duration = Toast.LENGTH_SHORT;
+        Context context = getApplicationContext();
+        Random random = new Random();
+
+        //Setting Maximum Seekbar Values
+        seekbarLower.setMax(maxBound);
+        seekbarUpper.setMax(maxBound);
+
+        //Toast toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it! ", duration);
+
+        //Button pressed
+        numberGeneratorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int randomNumber = random.nextInt((upperBoundCurrentNum - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum; //Generates a random Number between the selected numbers
+                Toast toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it! ", duration);
+                toast.show();
+            }
+        });
+
+
+        //Lower Seekbar
+        seekbarLower.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                editTextLower.setText(String.valueOf(i));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        //Upper Seekbar
+        seekbarUpper.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                editTextUpper.setText(String.valueOf(i));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     @Override
