@@ -12,11 +12,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    final int maxBound = 1000;
+    int guessedNumber;
+    int randomNumber;
+    int lowerBoundCurrentNum; //has to be changed to the Values in EditText lower section
+    int upperBoundCurrentNum; //has to be changed to the Values in EditText higher section
+    int duration = Toast.LENGTH_SHORT; //duration of the message that will be shown
+    Random random = new Random();
+    Toast toast;
+
+    SeekBar seekbarLower;
+    SeekBar seekbarUpper;
+    Button numberGeneratorButton;
+    EditText editTextLower;
+    EditText editTextUpper;
+    Button evaluateButton;
+    Button hintButton;
+    Context context;
+    Button divisibilityHintButton;
+    Button primeNumberHintButton;
+    Button digitSumHintButton;
+    Button digitProductHintButton;
+    TextView currentScoreTextView;
+    TextView guessedNumberTextField;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,33 +52,62 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SeekBar seekbarLower = findViewById(R.id.seekBarLowerBound);
-        SeekBar seekbarUpper = findViewById(R.id.seekBarUpperBound);
-        final Button numberGeneratorButton = findViewById(R.id.numberGeneratorButton);
-        final EditText editTextLower = findViewById(R.id.seekbarLower);
-        final EditText editTextUpper = findViewById(R.id.seekbarUpper);
+        seekbarLower = findViewById(R.id.seekBarLowerBound);
+        seekbarUpper = findViewById(R.id.seekBarUpperBound);
+        currentScoreTextView = findViewById(R.id.currentScoreTextView);
+        guessedNumberTextField = findViewById(R.id.guessedNumberTextField);
+        editTextLower = findViewById(R.id.seekbarLowerText);
+        editTextUpper = findViewById(R.id.seekbarUpperText);
+        evaluateButton = findViewById(R.id.evaluateButton);
+        hintButton = findViewById(R.id.hintButton);
+        numberGeneratorButton = findViewById(R.id.numberGeneratorButton);
+        divisibilityHintButton = findViewById(R.id.divisibilityHintButton);
+        primeNumberHintButton = findViewById(R.id.primeNumberHintButton);
+        digitSumHintButton = findViewById(R.id.digitSumHintButton);
+        digitProductHintButton = findViewById(R.id.digitProductHintButton);
+        context = getApplicationContext();
 
-        final int maxBound = 1000;
-        int lowerBoundCurrentNum = 1; //has to be changed to the Values in EditText lower section
-        int upperBoundCurrentNum = 4; //has to be changed to the Values in EditText higher section
-        int guessedNumber;
-        int duration = Toast.LENGTH_SHORT;
-        Context context = getApplicationContext();
-        Random random = new Random();
+
 
         //Setting Maximum Seekbar Values
+        seekbarLower.setProgress(0);
+        editTextLower.setText(String.valueOf(seekbarLower.getProgress()));
+        seekbarUpper.setProgress(1000);
+        editTextUpper.setText(String.valueOf(seekbarUpper.getProgress()));
         seekbarLower.setMax(maxBound);
         seekbarUpper.setMax(maxBound);
-
-        //Toast toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it! ", duration);
 
         //Button pressed
         numberGeneratorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int randomNumber = random.nextInt((upperBoundCurrentNum - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum; //Generates a random Number between the selected numbers
-                Toast toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it! ", duration);
-                toast.show();
+                    if(lowerBoundCurrentNum < upperBoundCurrentNum) {
+                        randomNumber = random.nextInt((upperBoundCurrentNum - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum; //Generates a random Number between the selected numbers
+                        toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it! " + randomNumber, duration);
+                        toast.show();
+
+                        //Making the Buttons Clickable for the user
+                        evaluateButton.setEnabled(true);
+                        hintButton.setEnabled(true);
+                        divisibilityHintButton.setEnabled(true);
+                        primeNumberHintButton.setEnabled(true);
+                        digitSumHintButton.setEnabled(true);
+                        digitProductHintButton.setEnabled(true);
+
+                        //Setting the Score
+                        currentScoreTextView.setText(String.valueOf(upperBoundCurrentNum - lowerBoundCurrentNum));
+                    }
+            }
+        });
+
+        evaluateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Integer.parseInt((String) guessedNumberTextField.getText()) <= 0){
+                    guessedNumber = Integer.parseInt((String) guessedNumberTextField.getText());
+                    //TODO: Check if the guessed number is equal the generated number, if not return a Toast
+                }
+
             }
         });
 
@@ -69,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                lowerBoundCurrentNum = seekBar.getProgress();
             }
         });
 
@@ -85,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                upperBoundCurrentNum = seekBar.getProgress();
             }
         });
     }

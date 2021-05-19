@@ -35,7 +35,7 @@
         app:layout_constraintVertical_bias="0.959" />
 
     <EditText
-        android:id="@+id/seekbarUpper"
+        android:id="@+id/seekbarUpperText"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -48,7 +48,7 @@
         app:layout_constraintVertical_bias="0.098" />
 
     <EditText
-        android:id="@+id/seekbarLower"
+        android:id="@+id/seekbarLowerText"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -79,6 +79,7 @@
         android:id="@+id/divisibilityHintButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:enabled="false"
         android:fontFamily="sans-serif-thin"
         android:text="Divisibility Hint"
         android:textSize="14sp"
@@ -96,12 +97,13 @@
         android:fontFamily="sans-serif-thin"
         android:text="Prime Number Hint"
         android:textSize="14sp"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintHorizontal_bias="0.072"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.852" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <RadioButton
         android:id="@+id/digitSumHintButton"
@@ -110,12 +112,13 @@
         android:fontFamily="sans-serif-thin"
         android:text="Digit Sum Hint"
         android:textSize="14sp"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.906" />
+        app:layout_constraintVertical_bias="0.914" />
 
     <RadioButton
         android:id="@+id/digitProductHintButton"
@@ -124,12 +127,13 @@
         android:fontFamily="sans-serif-thin"
         android:text="Digit Product Hint"
         android:textSize="14sp"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.959" />
+        app:layout_constraintVertical_bias="0.972" />
 
     <SeekBar
         android:id="@+id/seekBarLowerBound"
@@ -185,14 +189,14 @@
         android:id="@+id/yourGuessTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:fontFamily="sans-serif-black"
         android:text="Your Guess:"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.507" />
+        app:layout_constraintVertical_bias="0.514" />
 
     <TextView
         android:id="@+id/scoreTextView"
@@ -202,10 +206,10 @@
         android:text="Your Score:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.735"
+        app:layout_constraintHorizontal_bias="0.746"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/seekBarUpperBound"
-        app:layout_constraintVertical_bias="0.561" />
+        app:layout_constraintVertical_bias="0.563" />
 
     <TextView
         android:id="@+id/currentScoreTextView"
