@@ -1,6 +1,7 @@
 package com.example.project1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +21,11 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     final int maxBound = 1000;
-    int guessedNumber;
-    int randomNumber;
-    int lowerBoundCurrentNum; //has to be changed to the Values in EditText lower section
-    int upperBoundCurrentNum; //has to be changed to the Values in EditText higher section
+    static int guessedNumber;
+    static int randomNumber;
+    int lowerBoundCurrentNum;
+    int upperBoundCurrentNum;
+    static int score;
     int duration = Toast.LENGTH_SHORT; //duration of the message that will be shown
     Random random = new Random();
     Toast toast;
@@ -40,9 +42,8 @@ public class MainActivity extends AppCompatActivity {
     Button primeNumberHintButton;
     Button digitSumHintButton;
     Button digitProductHintButton;
-    TextView currentScoreTextView;
+    static TextView currentScoreTextView;
     TextView guessedNumberTextField;
-
 
 
     @Override
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle("Guess My Number");
 
         seekbarLower = findViewById(R.id.seekBarLowerBound);
         seekbarUpper = findViewById(R.id.seekBarUpperBound);
@@ -77,13 +79,15 @@ public class MainActivity extends AppCompatActivity {
         seekbarLower.setMax(maxBound);
         seekbarUpper.setMax(maxBound);
 
+
+
         //Button pressed
         numberGeneratorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                     if(lowerBoundCurrentNum < upperBoundCurrentNum) {
                         randomNumber = random.nextInt((upperBoundCurrentNum - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum; //Generates a random Number between the selected numbers
-                        toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it! " + randomNumber, duration);
+                        toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it!", duration);
                         toast.show();
 
                         //Making the Buttons Clickable for the user
@@ -95,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
                         digitProductHintButton.setEnabled(true);
 
                         //Setting the Score
-                        currentScoreTextView.setText(String.valueOf(upperBoundCurrentNum - lowerBoundCurrentNum));
+                        score = upperBoundCurrentNum - lowerBoundCurrentNum;
+                        currentScoreTextView.setText(String.valueOf(score));
                     }
             }
         });
@@ -103,11 +108,22 @@ public class MainActivity extends AppCompatActivity {
         evaluateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Integer.parseInt((String) guessedNumberTextField.getText()) <= 0){
-                    guessedNumber = Integer.parseInt((String) guessedNumberTextField.getText());
-                    //TODO: Check if the guessed number is equal the generated number, if not return a Toast
+                //Incase something went wrong with the user input
+                try{
+                    guessedNumber = Integer.parseInt(String.valueOf(guessedNumberTextField.getText()));
+                }catch (Exception e){
+                    toast = Toast.makeText(context, "Please Enter a valid Number before pressing the Button", duration);
+                    toast.show();
                 }
 
+
+                if (guessedNumber < lowerBoundCurrentNum || guessedNumber > upperBoundCurrentNum) {
+                    toast = Toast.makeText(context, "Your guess is beyond range (the secret number was generated from ["
+                            + lowerBoundCurrentNum + ", " + upperBoundCurrentNum + "].", duration);
+                    toast.show();
+                } else {
+                    openNewScreen();
+                }
             }
         });
 
@@ -145,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
                 upperBoundCurrentNum = seekBar.getProgress();
             }
         });
+    }
+
+    public void openNewScreen(){
+        Intent intent = new Intent(this, EvaluationScreen.class);
+        startActivity(intent);
     }
 
     @Override
