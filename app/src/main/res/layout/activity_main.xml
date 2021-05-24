@@ -75,65 +75,54 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.567" />
 
-    <RadioButton
-        android:id="@+id/divisibilityHintButton"
+    <RadioGroup
+        android:id="@+id/hintRadioGroup"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:enabled="false"
-        android:fontFamily="sans-serif-thin"
-        android:text="Divisibility Hint"
-        android:textSize="14sp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.798" />
+        app:layout_constraintVertical_bias="0.971">
 
-    <RadioButton
-        android:id="@+id/primeNumberHintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="Prime Number Hint"
-        android:textSize="14sp"
-        android:enabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.856" />
+        <RadioButton
+            android:id="@+id/primeNumberHintButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:checked="false"
+            android:enabled="false"
+            android:fontFamily="sans-serif-thin"
+            android:text="Prime Number Hint"
+            android:textSize="14sp" />
 
-    <RadioButton
-        android:id="@+id/digitSumHintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="Digit Sum Hint"
-        android:textSize="14sp"
-        android:enabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.914" />
+        <RadioButton
+            android:id="@+id/digitProductHintButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:enabled="false"
+            android:fontFamily="sans-serif-thin"
+            android:text="Digit Product Hint"
+            android:textSize="14sp" />
 
-    <RadioButton
-        android:id="@+id/digitProductHintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="Digit Product Hint"
-        android:textSize="14sp"
-        android:enabled="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.972" />
+        <RadioButton
+            android:id="@+id/digitSumHintButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:enabled="false"
+            android:fontFamily="sans-serif-thin"
+            android:text="Digit Sum Hint"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/divisibilityHintButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:enabled="false"
+            android:fontFamily="sans-serif-thin"
+            android:text="Divisibility Hint"
+            android:textSize="14sp" />
+    </RadioGroup>
 
     <SeekBar
         android:id="@+id/seekBarLowerBound"

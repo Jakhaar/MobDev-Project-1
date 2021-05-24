@@ -13,8 +13,8 @@ import android.widget.TextView;
 public class EvaluationScreen extends AppCompatActivity {
 
     int guessedNumber = MainActivity.guessedNumber;
-    String answerTooHigh = "Your guess of " + guessedNumber + " is TOO HIGH";
-    String answerTooLow = "Your guess of " + guessedNumber + " is TOO LOW";
+    String answerTooHigh = "Your guess of " + guessedNumber + "\nis TOO HIGH";
+    String answerTooLow = "Your guess of " + guessedNumber + "\nis TOO LOW";
     String answerIsRight = "Excellent!\n" + guessedNumber + " is correct!";
 
     ConstraintLayout evaluationScreen;
@@ -29,21 +29,19 @@ public class EvaluationScreen extends AppCompatActivity {
 
         dismissButton = findViewById(R.id.dissmissButton);
         answerText = findViewById(R.id.textView);
-        guessedNumber = getIntent().getIntExtra("guessedNumber", 0);
+        guessedNumber = MainActivity.guessedNumber;
         evaluationScreen = findViewById(R.id.activityBackground);
 
-        answerText.setText(guessedNumber > MainActivity.randomNumber ? answerTooHigh : guessedNumber < MainActivity.randomNumber ? answerTooLow : answerIsRight);
+        answerText.setText(guessedNumber > MainActivity.randomNumber ? answerTooHigh :
+                guessedNumber < MainActivity.randomNumber ? answerTooLow : answerIsRight);
         //TODO: Color Gradiant is missing
-        evaluationScreen.setBackgroundColor(guessedNumber > MainActivity.randomNumber ? Color.RED : guessedNumber < MainActivity.randomNumber ? Color.BLUE : Color.WHITE);
+        evaluationScreen.setBackgroundColor(guessedNumber > MainActivity.randomNumber ? Color.RED :
+                guessedNumber < MainActivity.randomNumber ? Color.BLUE : Color.WHITE);
 
 
         dismissButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Update the Score
-                if(guessedNumber != MainActivity.randomNumber)
-                    MainActivity.score = MainActivity.score - 1;
-                    MainActivity.currentScoreTextView.setText(MainActivity.score);
                 finish();
             }
         });

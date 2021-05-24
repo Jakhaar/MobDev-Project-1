@@ -2,19 +2,35 @@ package com.example.project1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout
+        .widget.CoordinatorLayout;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.material
+        .snackbar
+        .Snackbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Random;
 
@@ -23,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
     final int maxBound = 1000;
     static int guessedNumber;
     static int randomNumber;
-    int lowerBoundCurrentNum;
-    int upperBoundCurrentNum;
+    int lowerBoundCurrentNum = 0;
+    int upperBoundCurrentNum = 1000;
     static int score;
     int duration = Toast.LENGTH_SHORT; //duration of the message that will be shown
     Random random = new Random();
     Toast toast;
+    Snackbar snackbar;
 
+    RadioGroup hintRadioGroup;
     SeekBar seekbarLower;
     SeekBar seekbarUpper;
     Button numberGeneratorButton;
@@ -38,12 +56,9 @@ public class MainActivity extends AppCompatActivity {
     Button evaluateButton;
     Button hintButton;
     Context context;
-    Button divisibilityHintButton;
-    Button primeNumberHintButton;
-    Button digitSumHintButton;
-    Button digitProductHintButton;
-    static TextView currentScoreTextView;
-    TextView guessedNumberTextField;
+    RadioButton divisibilityHintButton, primeNumberHintButton,
+            digitSumHintButton, digitProductHintButton;
+    TextView currentScoreTextView, guessedNumberTextField;
 
 
     @Override
@@ -54,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Guess My Number");
 
+        hintRadioGroup = findViewById(R.id.hintRadioGroup);
         seekbarLower = findViewById(R.id.seekBarLowerBound);
         seekbarUpper = findViewById(R.id.seekBarUpperBound);
         currentScoreTextView = findViewById(R.id.currentScoreTextView);
@@ -122,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
                             + lowerBoundCurrentNum + ", " + upperBoundCurrentNum + "].", duration);
                     toast.show();
                 } else {
+                    if(guessedNumber != randomNumber){
+                        //Updating the score if needed
+                        --score;
+                        currentScoreTextView.setText(String.valueOf(score));
+                    }
                     openNewScreen();
                 }
             }
@@ -159,6 +180,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 upperBoundCurrentNum = seekBar.getProgress();
+            }
+        });
+
+        hintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!digitProductHintButton.isChecked() &&
+                !divisibilityHintButton.isChecked() &&
+                !primeNumberHintButton.isChecked() &&
+                !digitSumHintButton.isChecked()){
+                    toast = Toast.makeText(context, "You should select the type of hint first!", duration);
+                    toast.show();
+                } else {
+                            Snackbar snackBar = Snackbar.make(v, "text!", Snackbar.LENGTH_LONG)
+                                    .setAction("action!", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            });
+                            snackBar.setActionTextColor(Color.BLUE);
+                            View snackBarView = snackBar.getView();
+                            TextView textView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
+                            textView.setTextColor(Color.RED);
+                            snackBar.show();
+                }
             }
         });
     }
