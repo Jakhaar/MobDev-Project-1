@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project1">
-        <activity android:name=".EvaluationScreen"></activity>
+        <activity android:name=".EvaluationScreen"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Project1.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

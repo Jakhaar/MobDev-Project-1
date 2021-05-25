@@ -10,51 +10,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout
-        .widget.CoordinatorLayout;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material
         .snackbar
         .Snackbar;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    final int maxBound = 1000;
-    static int guessedNumber;
-    static int randomNumber;
-    int lowerBoundCurrentNum = 0;
-    int upperBoundCurrentNum = 1000;
-    static int score;
-    int duration = Toast.LENGTH_SHORT; //duration of the message that will be shown
+    final int maxBound = 1000, primeNumberHintCost = 10, digitProductHintCost = 3, digitSumHintCost = 5, divisibilityHintCost = 1;
+    int hintCost; //
+    static int guessedNumber, randomNumber, score, attempts = 0,
+            lowerBoundCurrentNum = 0, upperBoundCurrentNum = 100, duration = Toast.LENGTH_SHORT;; //duration of the message that will be shown
+    String hintText;
     Random random = new Random();
     Toast toast;
-    Snackbar snackbar;
-
-    RadioGroup hintRadioGroup;
-    SeekBar seekbarLower;
-    SeekBar seekbarUpper;
-    Button numberGeneratorButton;
-    EditText editTextLower;
-    EditText editTextUpper;
-    Button evaluateButton;
-    Button hintButton;
+    ConstraintLayout constraintLayout;
+    SeekBar seekbarLower, seekbarUpper;
+    Button numberGeneratorButton, evaluateButton, hintButton;
+    EditText editTextLower, editTextUpper;
     Context context;
     RadioButton divisibilityHintButton, primeNumberHintButton,
             digitSumHintButton, digitProductHintButton;
@@ -69,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Guess My Number");
 
-        hintRadioGroup = findViewById(R.id.hintRadioGroup);
+        constraintLayout = findViewById(R.id.coordinatorLayout2);
         seekbarLower = findViewById(R.id.seekBarLowerBound);
         seekbarUpper = findViewById(R.id.seekBarUpperBound);
         currentScoreTextView = findViewById(R.id.currentScoreTextView);
@@ -90,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         //Setting Maximum Seekbar Values
         seekbarLower.setProgress(0);
         editTextLower.setText(String.valueOf(seekbarLower.getProgress()));
-        seekbarUpper.setProgress(1000);
+        seekbarUpper.setProgress(100);
         editTextUpper.setText(String.valueOf(seekbarUpper.getProgress()));
         seekbarLower.setMax(maxBound);
         seekbarUpper.setMax(maxBound);
@@ -116,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //Setting the Score
                         score = upperBoundCurrentNum - lowerBoundCurrentNum;
+                        attempts = 0;
                         currentScoreTextView.setText(String.valueOf(score));
                     }
             }
@@ -125,13 +110,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Incase something went wrong with the user input
+                //TODO: The New Screen is Opening even with no Input from the user
                 try{
                     guessedNumber = Integer.parseInt(String.valueOf(guessedNumberTextField.getText()));
                 }catch (Exception e){
                     toast = Toast.makeText(context, "Please Enter a valid Number before pressing the Button", duration);
                     toast.show();
+                    return;
                 }
-
 
                 if (guessedNumber < lowerBoundCurrentNum || guessedNumber > upperBoundCurrentNum) {
                     toast = Toast.makeText(context, "Your guess is beyond range (the secret number was generated from ["
@@ -139,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
                     toast.show();
                 } else {
                     if(guessedNumber != randomNumber){
-                        //Updating the score if needed
                         --score;
                         currentScoreTextView.setText(String.valueOf(score));
                     }
+                    ++attempts;
                     openNewScreen();
                 }
             }
@@ -186,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         hintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int value = 0;
                 if(!digitProductHintButton.isChecked() &&
                 !divisibilityHintButton.isChecked() &&
                 !primeNumberHintButton.isChecked() &&
@@ -193,18 +180,43 @@ public class MainActivity extends AppCompatActivity {
                     toast = Toast.makeText(context, "You should select the type of hint first!", duration);
                     toast.show();
                 } else {
-                            Snackbar snackBar = Snackbar.make(v, "text!", Snackbar.LENGTH_LONG)
-                                    .setAction("action!", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                }
-                            });
-                            snackBar.setActionTextColor(Color.BLUE);
-                            View snackBarView = snackBar.getView();
-                            TextView textView = snackBarView.findViewById(android.support.design.R.id.snackbar_text);
-                            textView.setTextColor(Color.RED);
-                            snackBar.show();
+                    if(digitProductHintButton.isChecked()){
+                        hintCost = digitProductHintCost;
+                    } else if(divisibilityHintButton.isChecked()){
+                        hintCost = divisibilityHintCost;
+                    } else if(primeNumberHintButton.isChecked()){
+                        hintCost = primeNumberHintCost;
+                    } else if(digitSumHintButton.isChecked()){
+                        hintCost = digitSumHintCost;
+                    }
+                    Snackbar snackBar;
+                    snackBar = Snackbar.make(constraintLayout, "This hints costs " + hintCost + " point(s)!", Snackbar.LENGTH_LONG).setAction("I WANT IT!", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(digitProductHintButton.isChecked() && (score > hintCost)){
+                                hintText = "The digit product is " + String.valueOf(digitProduct(randomNumber));
+                            } else if(divisibilityHintButton.isChecked() && (score >= hintCost)){
+                                hintText = dividable(randomNumber);
+                            } else if(primeNumberHintButton.isChecked() && (score >= hintCost)){
+                                hintText = isPrimeNumber(randomNumber) ?
+                                        "It is a prime number" : "It is NOT a prime number";
+                            } else if(digitSumHintButton.isChecked() && (score >= hintCost)){
+                                hintText = "The digit product is " + String.valueOf(digitSum(randomNumber));
+                            } else{
+                                toast = Toast.makeText(context, "You don't have enough points for this hint", duration);
+                                toast.show();
+                                return;
+                            }
+                            toast = Toast.makeText(context, hintText, duration);
+                            score -= hintCost;
+                            currentScoreTextView.setText(String.valueOf(score));
+                            toast.show();
+                        }
+                    });
+                    snackBar.setActionTextColor(Color.WHITE);
+                    snackBar.show();
                 }
+
             }
         });
     }
@@ -212,6 +224,40 @@ public class MainActivity extends AppCompatActivity {
     public void openNewScreen(){
         Intent intent = new Intent(this, EvaluationScreen.class);
         startActivity(intent);
+    }
+
+    public static boolean isPrimeNumber(final int value) {
+        if (value <= 2) {
+            return (value == 2);
+        }
+        for (int i = 2; i * i <= value; i++) {
+            if (value % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int digitProduct(final int value){
+        int sum = 1;
+        for(int i = 0; i < String.valueOf(value).length(); i++){
+            sum *= Integer.parseInt(String.valueOf(String.valueOf(value).charAt(i)));
+        }
+        return sum;
+    }
+
+    public static int digitSum(final int value){
+        int sum = 0;
+        for(int i = 0; i < String.valueOf(value).length(); i++){
+            sum += Integer.parseInt(String.valueOf(String.valueOf(value).charAt(i)));
+        }
+        return sum;
+    }
+
+    public static String dividable(final int value){
+        Random random = new Random();
+        Integer num = random.nextInt(random.nextInt((randomNumber - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum);
+        return (value % num == 1) ? "It is not dividable by " + num : "It is dividable by " + num;
     }
 
     @Override
