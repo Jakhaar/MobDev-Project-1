@@ -32,17 +32,19 @@ public class MainActivity extends AppCompatActivity {
     int hintCost; //
     static int guessedNumber, randomNumber, score, attempts = 0,
             lowerBoundCurrentNum = 0, upperBoundCurrentNum = 100, duration = Toast.LENGTH_SHORT;; //duration of the message that will be shown
-    String hintText;
+    String hintText, endOfGameText;
     Random random = new Random();
     Toast toast;
     ConstraintLayout constraintLayout;
     SeekBar seekbarLower, seekbarUpper;
     Button numberGeneratorButton, evaluateButton, hintButton;
     EditText editTextLower, editTextUpper;
-    Context context;
+    static Context context;
     RadioButton divisibilityHintButton, primeNumberHintButton,
             digitSumHintButton, digitProductHintButton;
-    TextView currentScoreTextView, guessedNumberTextField;
+    static TextView currentScoreTextView;
+    TextView guessedNumberTextField;
+    static boolean gameIsOver = false, won = false;
 
 
     @Override
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                     if(lowerBoundCurrentNum < upperBoundCurrentNum) {
+                        gameIsOver = false;
+                        won = false;
                         randomNumber = random.nextInt((upperBoundCurrentNum - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum; //Generates a random Number between the selected numbers
                         toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it!", duration);
                         toast.show();
@@ -109,8 +113,19 @@ public class MainActivity extends AppCompatActivity {
         evaluateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Incase the game is over
+                if(gameIsOver){
+                    gameIsOver();
+                    return;
+                } else if(won){
+                    Toast toast = Toast.makeText(context, "YOU ALREADY WON!\n" +
+                            "You solved the number game with " + attempts
+                            + " attempts, achieving a score of " + score + ".", duration);
+                    toast.show();
+                    return;
+                }
+
                 //Incase something went wrong with the user input
-                //TODO: The New Screen is Opening even with no Input from the user
                 try{
                     guessedNumber = Integer.parseInt(String.valueOf(guessedNumberTextField.getText()));
                 }catch (Exception e){
@@ -173,6 +188,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int value = 0;
+
+                //Incase the game is over
+                if(gameIsOver){
+                    gameIsOver();
+                    return;
+                }else if(won){
+                    Toast toast = Toast.makeText(context, "YOU ALREADY WON!\n" +
+                            "You solved the number game with " + attempts
+                            + " attempts, achieving a score of " + score + ".", duration);
+                    toast.show();
+                    return;
+                }
+
                 if(!digitProductHintButton.isChecked() &&
                 !divisibilityHintButton.isChecked() &&
                 !primeNumberHintButton.isChecked() &&
@@ -216,7 +244,6 @@ public class MainActivity extends AppCompatActivity {
                     snackBar.setActionTextColor(Color.WHITE);
                     snackBar.show();
                 }
-
             }
         });
     }
@@ -224,6 +251,24 @@ public class MainActivity extends AppCompatActivity {
     public void openNewScreen(){
         Intent intent = new Intent(this, EvaluationScreen.class);
         startActivity(intent);
+    }
+
+    public static void endOfGame(){
+        if(score <= 0){
+            gameIsOver = true;
+            currentScoreTextView.setText("LOST");
+            Toast toast = Toast.makeText(context, "You Lost!\nYou don't have any Points left.\n" +
+                    "Please start again by generating a new number", duration);
+            toast.show();
+        }
+    }
+
+    public static void gameIsOver(){
+        if(gameIsOver){
+            Toast toast = Toast.makeText(context, "You Lost!\nYou don't have any Points left.\n" +
+                    "Please start again by generating a new number", duration);
+            toast.show();
+        }
     }
 
     public static boolean isPrimeNumber(final int value) {
@@ -255,9 +300,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static String dividable(final int value){
-        Random random = new Random();
-        Integer num = random.nextInt(random.nextInt((randomNumber - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum);
-        return (value % num == 1) ? "It is not dividable by " + num : "It is dividable by " + num;
+            Random random = new Random();
+            int num = random.nextInt(random.nextInt((randomNumber - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum);
+            if(value == 0){
+                return "This number is not divisible";
+            } else if(num == 0){
+                num = 1;
+            }
+            return (value % num == 1) ? "It is not dividable by " + num : "It is dividable by " + num;
     }
 
     @Override

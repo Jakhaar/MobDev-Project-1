@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//TODO: FULL SCREEN MODE fehlt zur hälfte
 public class EvaluationScreen extends AppCompatActivity {
 
-    int intesity;
     int guessedNumber = MainActivity.guessedNumber;
     String answerTooHigh = "Your guess of " + guessedNumber + "\nis TOO HIGH",
             answerTooLow = "Your guess of " + guessedNumber + "\nis TOO LOW",
@@ -57,6 +57,9 @@ public class EvaluationScreen extends AppCompatActivity {
                     context = getApplicationContext();
                     Toast toast = Toast.makeText(context, congratsText, Toast.LENGTH_LONG);
                     toast.show();
+                    MainActivity.won = true;
+                } else {
+                    MainActivity.endOfGame();
                 }
             }
         });
