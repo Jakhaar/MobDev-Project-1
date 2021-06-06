@@ -323,9 +323,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Looping itself until the random number is not causing any problems
         try{
-            int num = random.nextInt(random.nextInt(
-                    randomNumber - Math.max(lowerBoundCurrentNum,1)) +
-                    Math.max(lowerBoundCurrentNum,1));
+            int num = random.nextInt((upperBoundCurrentNum - 1) + 1) + 1;
             return (value % num == 0) ? "It is dividable by " + num : "It is NOT dividable by " + num;
         } catch (Exception e){
             return dividable(value);
