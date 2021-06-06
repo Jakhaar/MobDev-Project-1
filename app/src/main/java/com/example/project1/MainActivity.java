@@ -28,10 +28,11 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    final int maxBound = 1000, primeNumberHintCost = 10, digitProductHintCost = 3, digitSumHintCost = 5, divisibilityHintCost = 1;
-    int hintCost; //
+    final int maxBound = 1000, primeNumberHintCost = 10, digitProductHintCost = 3,
+            digitSumHintCost = 5, divisibilityHintCost = 1;
+    int hintCost;
     static int guessedNumber, randomNumber, score, attempts = 0,
-            lowerBoundCurrentNum = 0, upperBoundCurrentNum = 100, duration = Toast.LENGTH_SHORT;; //duration of the message that will be shown
+            lowerBoundCurrentNum = 0, upperBoundCurrentNum = 100, duration = Toast.LENGTH_SHORT;;
     String hintText, endOfGameText;
     Random random = new Random();
     Toast toast;
@@ -90,8 +91,14 @@ public class MainActivity extends AppCompatActivity {
                     if(lowerBoundCurrentNum < upperBoundCurrentNum) {
                         gameIsOver = false;
                         won = false;
-                        randomNumber = random.nextInt((upperBoundCurrentNum - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum; //Generates a random Number between the selected numbers
-                        toast = Toast.makeText(context,"A secret number has been generated randomly. Go, guess it!", duration);
+
+                        //Generates a random Number between the selected numbers
+                        randomNumber = random.nextInt(
+                                (upperBoundCurrentNum - lowerBoundCurrentNum) + 1)
+                                + lowerBoundCurrentNum;
+                        toast = Toast.makeText(context,
+                                "A secret number has been generated randomly. Go, guess it!",
+                                duration);
                         toast.show();
 
                         //Making the Buttons Clickable for the user
@@ -129,13 +136,15 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     guessedNumber = Integer.parseInt(String.valueOf(guessedNumberTextField.getText()));
                 }catch (Exception e){
-                    toast = Toast.makeText(context, "Please Enter a valid Number before pressing the Button", duration);
+                    toast = Toast.makeText(context,
+                            "Please Enter a valid Number before pressing the Button", duration);
                     toast.show();
                     return;
                 }
 
                 if (guessedNumber < lowerBoundCurrentNum || guessedNumber > upperBoundCurrentNum) {
-                    toast = Toast.makeText(context, "Your guess is beyond range (the secret number was generated from ["
+                    toast = Toast.makeText(context,
+                            "Your guess is beyond range (the secret number was generated from ["
                             + lowerBoundCurrentNum + ", " + upperBoundCurrentNum + "].", duration);
                     toast.show();
                 } else {
@@ -184,6 +193,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         hintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
                 !divisibilityHintButton.isChecked() &&
                 !primeNumberHintButton.isChecked() &&
                 !digitSumHintButton.isChecked()){
-                    toast = Toast.makeText(context, "You should select the type of hint first!", duration);
+                    toast = Toast.makeText(context, "You should select the type of hint first!",
+                            duration);
                     toast.show();
                 } else {
                     if(digitProductHintButton.isChecked()){
@@ -218,20 +230,25 @@ public class MainActivity extends AppCompatActivity {
                         hintCost = digitSumHintCost;
                     }
                     Snackbar snackBar;
-                    snackBar = Snackbar.make(constraintLayout, "This hints costs " + hintCost + " point(s)!", Snackbar.LENGTH_LONG).setAction("I WANT IT!", new View.OnClickListener() {
+                    snackBar = Snackbar.make(constraintLayout, "This hints costs " + hintCost +
+                            " point(s)!", Snackbar.LENGTH_LONG).setAction("I WANT IT!",
+                            new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if(digitProductHintButton.isChecked() && (score > hintCost)){
-                                hintText = "The digit product is " + String.valueOf(digitProduct(randomNumber));
+                                hintText = "The digit product is " + String.valueOf(
+                                        digitProduct(randomNumber));
                             } else if(divisibilityHintButton.isChecked() && (score >= hintCost)){
                                 hintText = dividable(randomNumber);
                             } else if(primeNumberHintButton.isChecked() && (score >= hintCost)){
                                 hintText = isPrimeNumber(randomNumber) ?
                                         "It is a prime number" : "It is NOT a prime number";
                             } else if(digitSumHintButton.isChecked() && (score >= hintCost)){
-                                hintText = "The digit product is " + String.valueOf(digitSum(randomNumber));
+                                hintText = "The digit product is " + String.valueOf(
+                                        digitSum(randomNumber));
                             } else{
-                                toast = Toast.makeText(context, "You don't have enough points for this hint", duration);
+                                toast = Toast.makeText(context,
+                                        "You don't have enough points for this hint", duration);
                                 toast.show();
                                 return;
                             }
@@ -301,12 +318,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static String dividable(final int value){
             Random random = new Random();
-            int num = random.nextInt(random.nextInt((randomNumber - lowerBoundCurrentNum) + 1) + lowerBoundCurrentNum);
-            if(value == 0){
-                return "This number is not divisible";
-            } else if(num == 0){
-                num = 1;
-            }
+            if(value == 0) return "It has NO dividable number";
+
+            int num = random.nextInt(random.nextInt(20 - 1) + 1);
             return (value % num == 1) ? "It is not dividable by " + num : "It is dividable by " + num;
     }
 

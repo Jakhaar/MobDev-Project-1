@@ -26,6 +26,7 @@ public class EvaluationScreen extends AppCompatActivity {
     ConstraintLayout evaluationScreen;
     Button dismissButton;
     TextView answerText;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class EvaluationScreen extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_evaluation_screen);
+        hideSystemUI();
 
         dismissButton = findViewById(R.id.dissmissButton);
         answerText = findViewById(R.id.textView);
@@ -40,11 +42,12 @@ public class EvaluationScreen extends AppCompatActivity {
         evaluationScreen = findViewById(R.id.activityBackground);
         answerText.setText(guessedNumber > MainActivity.randomNumber ? answerTooHigh :
                 guessedNumber < MainActivity.randomNumber ? answerTooLow : answerIsRight);
-        //TODO: Color Gradiant is missing
         evaluationScreen.setBackgroundColor(guessedNumber > MainActivity.randomNumber ?
-                Color.argb(200,255,0,0) :
+                Color.argb(Math.max(Math.abs(MainActivity.randomNumber - MainActivity.guessedNumber),
+                        15),255,0,0) :
                 guessedNumber < MainActivity.randomNumber ?
-                        Color.argb(200,0,0,255) :
+                        Color.argb(Math.max(Math.abs(MainActivity.randomNumber - MainActivity.guessedNumber),
+                                15),0,0,255) :
                         Color.argb(200,255,255,255));
 
 
@@ -65,10 +68,35 @@ public class EvaluationScreen extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     public void onBackPressed() {
         Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context, "Use the dismiss button to return", Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(context, "Use the dismiss button to return",
+                Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
+    private void hideSystemUI() {
+        // Enables regular immersive mode.
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 }
