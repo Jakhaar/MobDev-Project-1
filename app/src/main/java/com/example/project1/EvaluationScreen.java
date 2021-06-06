@@ -43,11 +43,13 @@ public class EvaluationScreen extends AppCompatActivity {
         answerText.setText(guessedNumber > MainActivity.randomNumber ? answerTooHigh :
                 guessedNumber < MainActivity.randomNumber ? answerTooLow : answerIsRight);
         evaluationScreen.setBackgroundColor(guessedNumber > MainActivity.randomNumber ?
-                Color.argb(Math.max(Math.abs(MainActivity.randomNumber - MainActivity.guessedNumber),
-                        15),255,0,0) :
+                Color.argb(Math.min(
+                        Math.max(Math.abs(MainActivity.randomNumber - MainActivity.guessedNumber),
+                        15),200),255,0,0) :
                 guessedNumber < MainActivity.randomNumber ?
-                        Color.argb(Math.max(Math.abs(MainActivity.randomNumber - MainActivity.guessedNumber),
-                                15),0,0,255) :
+                        Color.argb(Math.min(
+                                Math.max(Math.abs(MainActivity.randomNumber - MainActivity.guessedNumber),
+                                        15),200),0,0,255) :
                         Color.argb(200,255,255,255));
 
 

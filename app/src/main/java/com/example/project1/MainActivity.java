@@ -24,6 +24,7 @@ import com.google.android.material
 
 import androidx.appcompat.widget.Toolbar;
 
+import java.security.spec.ECField;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -317,11 +318,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static String dividable(final int value){
-            Random random = new Random();
-            if(value == 0) return "It has NO dividable number";
+        Random random = new Random();
+        if(value == 0) return "It has NO dividable number";
 
-            int num = random.nextInt(random.nextInt(20 - 1) + 1);
-            return (value % num == 1) ? "It is not dividable by " + num : "It is dividable by " + num;
+        //Looping itself until the random number is not causing any problems
+        try{
+            int num = random.nextInt(random.nextInt(
+                    randomNumber - Math.max(lowerBoundCurrentNum,1)) +
+                    Math.max(lowerBoundCurrentNum,1));
+            return (value % num == 0) ? "It is dividable by " + num : "It is NOT dividable by " + num;
+        } catch (Exception e){
+            return dividable(value);
+        }
     }
 
     @Override
